@@ -8,7 +8,7 @@
 # Author: George Chan, Sean Guo
 
 
-# In[78]:
+# In[2]:
 
 
 # Import library and modules
@@ -91,6 +91,7 @@ for filename in sorted(all_files):
     # Experiment to see if only using annual membership will show a different
     # df = df.loc[df['usertype'] == 'Subscriber']
     
+    # Because my laptop is too slow .... :P
     # Radnomly select 10% of the data, with random_state = 1
     df = df.sample(frac = 0.1, replace = True, random_state = 1)
     
@@ -113,14 +114,14 @@ citibike = citibike.dropna()
 print("After dropping NaN:  " + "{:,}".format(citibike.shape[0]))
 
 
-# In[6]:
+# In[178]:
 
 
 # Sample my dataset
 citibike.head()
 
 
-# # Question 01: What is monthly total ridership in 2018?
+# # Question 01: What is daily and monthly total ridership in 2018?
 
 # In[7]:
 
@@ -179,34 +180,39 @@ daily_answer = citibike_daily_df.groupby(['starttime']).size()
 # In[12]:
 
 
+# Checking to see what is monthly_answer type.
 type(monthly_answer)
 
 
-# In[37]:
+# In[179]:
 
 
-ax = monthly_answer.plot(
+# Draw a basic plot for the monthly ridership data
+monthly_answer.plot(
     figsize = (20,10), 
     kind = 'bar',
     title = '2018 Monthly Citibike Ridership Count',
-    fontsize = 12,
+    fontsize = 14,
     rot=0)
 
 # Finally learned how to do it, you have to assign it to an object first.
 # Reference: https://stackoverflow.com/a/21487560
 
 # Then use set_xlable ...
-ax.set_xlabel('')
+# ax.set_xlabel('')
 
 # Very complicated, 
 # Reference: https://stackoverflow.com/a/25973637
-ax.get_yaxis().set_major_formatter(
-    matplotlib.ticker.FuncFormatter(lambda y, p: format(int(y), ',')))
+# ax.get_yaxis().set_major_formatter(
+#    matplotlib.ticker.FuncFormatter(lambda y, p: format(int(y), ',')))
 
 
-# In[14]:
+# In[180]:
 
 
+# Create a monthly temperature dictionary, data otained from google.
+# probably need to find a way to get daily temperature in order to do more 
+# in depth analysis and build a regression model.
 temperature_dict = {
     'Month':['2018-01', 
              '2018-02',
@@ -223,13 +229,20 @@ temperature_dict = {
     'Temperature':[32.5, 35.5, 42.5, 53, 62.5, 71.5, 76.5, 75.5, 68, 57, 48, 37.5]
 }
 
+# Create a dataframe using the dictionary data
 temperature_df = pd.DataFrame.from_dict(temperature_dict)
 
+# Rename the columns properly
+temperature_df = temperature_df.rename(index=str, columns={"Month": "Month", "Temperature": "Temperature"})
+
+# Learned how to add x & y axis label
 temperature_df.plot(
+    x = 'Month',
+    y = 'Temperature',
     figsize = (20,10), 
     kind = 'line',
     title = '2018 Average Temperature',
-    fontsize = 12,
+    fontsize = 14,
     linewidth = 4.0, 
     markeredgewidth = 10.0,
     linestyle = '--', 
@@ -241,10 +254,10 @@ temperature_df.plot(
 
 
 daily_answer.plot(
-    figsize = (20,10), 
+    figsize = (20,10),
     kind = 'bar',
     title = '2018 Monthly Citibike Ridership Count',
-    fontsize = 12,
+    fontsize = 14,
     legend=False)
 
 
@@ -256,7 +269,7 @@ daily_answer.plot(
 # Enter Python & Pandas Code here :)
 
 
-# # Question 03: What is the most popular station?
+# # Question 03: What is the most / least popular station?
 
 # In[17]:
 
@@ -296,13 +309,6 @@ print('It is also known as the Pershing Square Viaduct.')
 # Longest trip (Distance formula)
 # Shortest trip (Distance formula)
 # Holiday trip (Federal Holiday)
-
-# Number of conected trip ...
-# Start and end station by the same user?
-
-# Analysis on commute habbit
-# Year of Birth & Gender (Start time and station)
-# Morning starting on the train station and ending on the same station
 
 
 # In[18]:
@@ -354,18 +360,19 @@ membership_df = membership_df.set_index(['usertype'])
 membership_df
 
 
-# In[22]:
+# In[181]:
 
 
 # Reference: https://markhneedham.com/blog/2018/09/18/matplotlib-remove-axis-legend/
 membership_df.plot(
     title = '2018 Citibike Rider Membership Data', 
+    fontsize = 14,
     kind = 'bar',
     rot = 0,
     legend = None)
 
 
-# In[204]:
+# In[22]:
 
 
 gender_df = citibike.groupby('gender')['gender'].count()
@@ -376,18 +383,19 @@ gender_df = gender_df.set_index(['gender'])
 gender_df
 
 
-# In[113]:
+# In[23]:
 
 
 # Reference: https://markhneedham.com/blog/2018/09/18/matplotlib-remove-axis-legend/
 gender_df.plot(
-    title = '2018 Citibike Rider Gender', 
+    title = '2018 Citibike Rider Gender',
+    fontsize = 14,
     kind = 'bar',
     rot = 0,
     legend = None)
 
 
-# In[174]:
+# In[24]:
 
 
 # Age Group
@@ -412,23 +420,48 @@ age_df['age'] = np.vectorize(get_age)(age_df['birth_year'])
 
 age_df = age_df[age_df['age'] != -1]
 
-age_df = age_df.groupby('age')['age'].count()
-age_df = age_df.reset_index(name = 'count')
-age_df = age_df.set_index(['age'])
+age_plot_df = age_df.groupby('age')['age'].count()
+age_plot_df = age_plot_df.reset_index(name = 'count')
+age_plot_df = age_plot_df.set_index(['age'])
 
 
-# In[175]:
+# In[25]:
 
 
-age_df.plot(
+age_plot_df.plot(
     figsize = (20,10), 
     title = '2018 Citibike Rider Age', 
+    fontsize = 14,
     kind = 'bar',
     rot = 0,
     legend = None)
 
 
-# In[188]:
+# In[26]:
+
+
+# bins = [0, 24, 59, 999]
+# labels = ['Student <=24','Adult','Senior Adult']
+
+bins = [0, 20, 30, 40, 50, 60, 100]
+labels = ['10-20', '21-30', '31-40', '41-50', '51-60', '60 and Above']
+
+age_df['AgeGroup'] = pd.cut(age_df['age'], bins=bins, labels=labels, right=False)
+
+agegroup_plot_df = age_df.groupby('AgeGroup')['AgeGroup'].count()
+agegroup_plot_df = agegroup_plot_df.reset_index(name = 'count')
+agegroup_plot_df = agegroup_plot_df.set_index(['AgeGroup'])
+
+agegroup_plot_df.plot(
+    figsize = (20,10), 
+    title = '2018 Citibike Rider Age Group', 
+    fontsize = 14,
+    kind = 'bar',
+    rot = 0,
+    legend = None)
+
+
+# In[27]:
 
 
 gender_df = citibike.groupby('gender')['gender'].count()
@@ -439,7 +472,7 @@ gender_df = gender_df.set_index(['gender'])
 gender_df
 
 
-# In[189]:
+# In[28]:
 
 
 # https://stackoverflow.com/a/43211266
@@ -481,7 +514,7 @@ ans = get_distance(40.730260, -73.953940, 40.729060, -73.957790)
 print("Result:", ans)
 
 
-# In[199]:
+# In[183]:
 
 
 import numpy as np
@@ -501,58 +534,176 @@ df['distance'] = np.vectorize(get_distance)(df['start station latitude'],
 # df['C'] = (df['B'] - df['A'])/ np.timedelta64(1, 's')
 df['duration'] = (df['stoptime'] - df['starttime']) / np.timedelta64(1, 's')
 
-df.head()
+df['speed'] = (df['distance'] / ((60.0 * 60.0) / df['duration']))
+
+# citibike_trip = citibike[citibike['start station name'] != citibike['end station name']]
+commute_trip = df[df['start station name'] != df['end station name']]
+
+# Limit the ride that is slower than walking and within reason (race bike...)
+commute_trip = commute_trip[(commute_trip['speed'] >= 3.5)
+                            & (commute_trip['speed'] <= 25)]
+
+# commute_trip = commute_trip[commute_trip['birth year'] >= 1989]
+
+'''
+Speeds above 16 mph are considered very vigorous while riding a bicycle. 
+A light pace would be 10 to 11.9 mph while a moderate pace is categorized as 12 to 13.9 mph. 
+If you are a beginner, start at a light or moderate pace and ride at speeds between 10 and 14 mph.
+'''
+
+speed_bins = [0, 9, 12, 15, 99]
+speed_labels = ['Leisurely (< 9 MPH)', 'Fast MPH (9 - 11.9 MPH)', 'Moderate (12 - 14.9 MPH)', 'Vigorous (15 MPH+)']
+
+commute_trip['SpeedGroup'] = pd.cut(commute_trip['speed'], bins=speed_bins, labels=speed_labels, right=False)
+
+
+# # To do: Look up scientific information about age group/ speed.
+
+# In[184]:
+
+
+commute_trip_plot = commute_trip.groupby('SpeedGroup')['SpeedGroup'].count()
+commute_trip_plot = commute_trip_plot.reset_index(name = 'count')
+commute_trip_plot = commute_trip_plot.set_index(['SpeedGroup'])
+
+commute_trip_plot.plot(
+    figsize = (20,10), 
+    title = '2018 Citibike Commuter Speed', 
+    kind = 'bar',
+    rot = 0,
+    legend = None)
+
+
+# # Question 4: Advanced commuting analysis
+
+# In[32]:
+
+
+# Example of connected trip.
+# Same gender and year of birth started in the same station within 5 minutes.
+
+# Example of regular commuter rides
+# Start and end station by the same user?
+# Morning starting on the train station and ending on the same station
+
+# Year of Birth & Gender (Start time and station)
+# Working age adult: 7am-9am trips, where they do they go to work at?
+
+
+# In[152]:
+
+
+# Helper function to determine if datetime is between a time
+def check_commute_hour(my_hour):
+    if (my_hour >= 6 and my_hour <= 10):
+        return 'Morning'
+    elif (my_hour >= 16 and my_hour <= 21):
+        return 'Evening'
+    else:
+        return 'Other'
+
+# Morning Ride (6am-10am)
+commute_df = citibike[['tripduration', 'starttime', 
+                       'start station name', 'end station name', 
+                       'usertype', 'birth year', 'gender']].copy()
+
+commute_df = commute_df.loc[commute_df['usertype'] == 'Subscriber']
+
+
+# In[185]:
+
+
+# Set a True or False Flag between 6am-10am (24 hour time format)
+# Link: https://stackoverflow.com/a/45564365
+# Super helpful trick to get the dt.hour (hour portion)
+commute_df['commute_type'] = np.vectorize(check_commute_hour)(commute_df['starttime'].dt.hour)
+commute_df['date'] = commute_df['starttime'].dt.date
+
+commute_df = commute_df.loc[commute_df['commute_type'] != 'Other']
+
+# Exclude daily ride, unknown gender and unknow age
+# How to filter by values: https://stackoverflow.com/a/17071908
+# df.loc[df['column_name'] == some_value]
+morning_commute_df = commute_df.loc[commute_df['commute_type'] == 'Morning']
+evening_commute_df = commute_df.loc[commute_df['commute_type'] == 'Evening']
+
+
+# In[199]:
+
+
+# Create a Ukey to join easier
+morning_commute_df['Ukey'] = (morning_commute_df['usertype'] + '-' + 
+                     morning_commute_df['birth year'].map(str) + '-' + 
+                     morning_commute_df['gender'].map(str) + '-' + 
+                     morning_commute_df['date'].map(str) + '-' +
+                     morning_commute_df['start station name'] + '-' +
+                     morning_commute_df['end station name'])
+
+evening_commute_df['Ukey'] = (evening_commute_df['usertype'] + '-' + 
+                     evening_commute_df['birth year'].map(str) + '-' + 
+                     evening_commute_df['gender'].map(str) + '-' + 
+                     evening_commute_df['date'].map(str) + '-' +
+                     evening_commute_df['end station name'] + '-' +
+                     evening_commute_df['start station name'])
+
+# Index by Ukey
+morning_commute_df = morning_commute_df.set_index('Ukey')
+evening_commute_df = evening_commute_df.set_index('Ukey')
 
 
 # In[200]:
 
 
-df['speed'] = (df['distance'] / ((60.0 * 60.0) / df['duration']))
+# How to get dataframe column and types
+# morning_df['starttime'].dtype << Just 1 column
+# https://stackoverflow.com/a/43852726
+print(type(morning_commute_df))
+print(morning_commute_df.dtypes)
+morning_commute_df.head(10)
 
 
 # In[201]:
 
 
-# citibike_trip = citibike[citibike['start station name'] != citibike['end station name']]
-commute_trip = df[df['start station name'] != df['end station name']]
+# Join the two dataframe to get continued trip (need them to the same date)
+round_trip_df = morning_commute_df.join(evening_commute_df, how='inner', on='Ukey', lsuffix='', rsuffix='_right')
 
 
 # In[202]:
 
 
-commute_trip = commute_trip[(commute_trip['speed'] >= 3.0)
-                            & (commute_trip['speed'] <= 25)]
-
-# commute_trip = commute_trip[commute_trip['birth year'] >= 1989]
+# Round trip dataframe! :)
+round_trip_df = round_trip_df.sort_values(by ='date')
 
 
 # In[203]:
 
 
-commute_trip.head()
+# Next question is how to show it on google map?
+round_trip_view_df = round_trip_df.drop(
+    ['usertype_right', 'birth year_right', 'gender_right','date_right'] 
+    , axis=1)
+
+round_trip_view_df = round_trip_view_df.loc[round_trip_view_df['tripduration'] >= 600]
+round_trip_view_df = round_trip_view_df.sort_values('date')
+
+
+# In[206]:
+
+
+# DataFrame.drop_duplicates
+round_trip_df = round_trip_df.drop_duplicates()
+round_trip_df.shape
+
+
+# In[205]:
+
+
+round_trip_df
 
 
 # In[ ]:
 
 
-commute_trip = commute_trip.groupby('speed')['speed'].count()
-commute_trip = commute_trip.reset_index(name = 'count')
-commute_trip = commute_trip.set_index(['speed'])
 
-
-# In[ ]:
-
-
-commute_trip.plot(
-    figsize = (20,10), 
-    title = '2018 Citibike Commuter Speed', 
-    kind = 'line',
-    rot = 0,
-    legend = None)
-
-
-# In[ ]:
-
-
-commute_trip
 
