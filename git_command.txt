@@ -1,0 +1,110 @@
+
+
+Step1:   set up git username and email;
+git config --global user.name "Your name here"
+git config --global user.email xguo7013@gmail.com
+
+Step2:   create a new git repo
+
+cd "project foler path"
+git init
+
+
+step3: add new files
+###if you want to save the file use: git commit
+
+git add. (for adding all the files in the folder)
+
+
+
+git add file1 file2 file3 file4
+
+step4: before commit, check any difference you made to the files
+
+git diff --cached
+
+###also  a brief summary of the situation with git status
+
+git status
+
+then you can use git commit
+
+step5: only commit the git modifies
+
+git commit -a
+
+###viewing the history of your changes
+
+git log
+
+git log -p
+
+git log --stat --summary
+
+/################# Managing Branches ##################/
+
+### set up a new branch
+
+git branch Sean_test
+
+### check which branch you are running at
+
+git branch
+
+### swith the branch 
+
+git checkout Sean_test
+
+/###after you processed files or modified the file, you need to merge it to the master branch #####/
+
+first go back to your master branch : git checkout master
+
+second to merge the two together    : git merge Sean_test 
+
+check the difference : git diff
+
+/################# Visualize the result ################/
+gitk
+
+##after you commit your branch and merged it with the master branch, yo can delete it ####
+
+git branch -d Sean_test
+
+git branch -D Sean_test ### this can ensure you to delete the branch completely
+
+/#############git for collaboration ###################/
+
+git clone  'file path' with a repoy name
+
+### after you made changes, then commit it
+
+git commit -a
+
+### go to the owner's master folder
+
+cd "folder path"
+
+git pull "teammate's folder path" master
+
+
+##############remote add for smaller knit group #########
+
+git remote add Sean "repo path"
+
+git merge coworker/master
+
+### coworker can also provide the pull
+
+git pull
+
+/########## how to use git and github ####################/
+
+
+1. create a fork in the github
+2. create a folder at you local drive
+3. clone the fork which you cna get the URL from the github
+4. make changes
+5. git commit
+6. push to your fork
+7. request a pull request on the github
+8. after it get approved, refresh your git
