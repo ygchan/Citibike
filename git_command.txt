@@ -105,6 +105,13 @@ git pull
 3. clone the fork which you cna get the URL from the github
 4. make changes
 5. git commit
-6. push to your fork
+6. push to your fork: 
+					git push origin master -f
+
 7. request a pull request on the github
-8. after it get approved, refresh your git
+8. after it get approved, refresh your git:
+											git fetch upstream
+
+
+
+
