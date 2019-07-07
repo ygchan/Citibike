@@ -1,5 +1,0 @@
-Hi George, this is a check for the master branch.
-after you add me as a calibrator, I should be able to pull files from the master branch,
-and pull this new file to you. To see if you can merge it into your master branch or not.
-
-Sean  7.1.2019
