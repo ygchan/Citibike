@@ -1,12 +1,10 @@
 # Citibike Data Analysis
-Citibike is a bicycle sharding system from NYC, providing services for Manhattan, Queens, Brooklyn and Jersey City. The goal is use this interesting dataset as practice to develope fluency with Python and Git.  
+Citibike is a bicycle sharding system from NYC, providing services for Manhattan, Queens, Brooklyn and Jersey City. The goal is use this interesting dataset as practice to develope fluency with Python and Git. You will need to use Juypter Notebook to run the main functions.
 
 To clone this project using following Git command:
 ```
 git clone https://github.com/ygchan/Citibike.git
 ```
-
-For most of the project, you will need to use Juypter Notebook.
 
 Citibike Data Source:
 https://www.citibikenyc.com/system-data
