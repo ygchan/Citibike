@@ -6,5 +6,7 @@ To clone this project using following Git command:
 git clone https://github.com/ygchan/Citibike.git
 ```
 
+For most of the project, you will need to use Juypter Notebook.
+
 Citibike Data Source:
 https://www.citibikenyc.com/system-data
