@@ -1,0 +1,4 @@
+-- This project idea is sparked from a friend.
+-- Inside of only using the sample database provided by textbook to practice 
+-- SQL. It might be a good idea to build a relational database warehouse
+-- using SQL and Python.
