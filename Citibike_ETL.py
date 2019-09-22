@@ -32,7 +32,8 @@ for file in file_list:
     # This get the https:// link
     link = file.get_attribute("href")
     # Check if this link contains a file
-    if (link.endswith('zip')):
+    # Only interested in 2019 data
+    if (link.endswith('zip') and '2019' in link):
     	# Getting the filename part only
     	# 201906-citibike-tripdata.csv.zip
 		# 201907-citibike-tripdata.csv.zip
