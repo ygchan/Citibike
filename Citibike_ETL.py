@@ -1,18 +1,7 @@
-# Step 01: Get a list of the files
-from bs4 import BeautifulSoup
-import requests
+from selenium import webdriver
+from webdriver_manager.chrome import ChromeDriverManager
 
-page = requests.get('https://s3.amazonaws.com/tripdata/index.html')
-
-# page.txt contain the entire html string
-# page.text
-html_doc = page.text
-
-soup = BeautifulSoup(html_doc, 'html.parser')
-
-# To print the formatted html 
-# print(soup.prettify())
-
-links = soup.find_all("a")
-
-soup.prettify()
+# Reference: https://stackoverflow.com/a/49851826
+# This is the only way George able to make Chrome() to work on my laptop.
+driver = webdriver.Chrome(ChromeDriverManager().install())
+driver.get('http://google.com')
