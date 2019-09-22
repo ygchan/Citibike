@@ -1,10 +1,11 @@
+# For starting the chrome application
 from selenium import webdriver
 from webdriver_manager.chrome import ChromeDriverManager
 
+# For wait functions
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait as wait
 from selenium.webdriver.support import expected_conditions as EC
-from selenium.webdriver.common.action_chains import ActionChains
 
 import time
 
@@ -20,31 +21,16 @@ title = driver.title
 # wait(driver, 15).until_not(EC.title_is(title))
 print(driver.title)
 
-time.sleep(10)
+time.sleep(5)
 
-# Click the title once
-driver.find_element_by_name('h1-title').click()
+# Reference: https://stackoverflow.com/a/34759880
+# This is the way to work around the bs4 limitation to get all links
+file_list = driver.find_elements_by_xpath('//a[@href]')
 
-# Send the command A
-ActionChains(driver).key_down(Keys.COMMAND)
-time.sleep(2)
-ActionChains(driver).send_keys('a')
-time.sleep(2)
-ActionChains(driver).key_up(Keys.COMMAND)
-time.sleep(2)
-ActionChains(driver).perform()
-
-print('Send Command A...')
-
-# Send the command C
-time.sleep(2)
-ActionChains(driver).key_down(Keys.COMMAND)
-time.sleep(2)
-ActionChains(driver).send_keys('c')
-time.sleep(2)
-ActionChains(driver).key_up(Keys.COMMAND)
-time.sleep(2)
-ActionChains(driver).perform()
-
-print('Send Command C...')
-print('Done!')
+# Iterate through this web object
+for file in file_list:
+    # This get the https:// link
+    link = file.get_attribute("href")
+    # Check if this link contains a file
+    if ('zip' in link):
+        print(link)
