@@ -27,6 +27,9 @@ time.sleep(5)
 # This is the way to work around the bs4 limitation to get all links
 file_list = driver.find_elements_by_xpath('//a[@href]')
 
+# filename and https hyper link dictionary
+cb_file_dict = {}
+
 # Iterate through this web object
 for file in file_list:
     # This get the https:// link
@@ -34,9 +37,11 @@ for file in file_list:
     # Check if this link contains a file
     # Only interested in 2019 data
     if (link.endswith('zip') and '2019' in link):
-    	# Getting the filename part only
-    	# 201906-citibike-tripdata.csv.zip
-		# 201907-citibike-tripdata.csv.zip
-		# 201908-citibike-tripdata.csv.zip
-		# ... etc
-        print(link.split('/')[-1])
+        # Getting the filename part only
+        # 201906-citibike-tripdata.csv.zip
+        # 201907-citibike-tripdata.csv.zip
+        # 201908-citibike-tripdata.csv.zip
+        # ... etc
+        filename = link.split('/')[-1]
+        cb_file_dict[filename] = link
+        print(filename)
